@@ -39,6 +39,7 @@ public class BankAccount {
         this.name= name;
         this.balance=balance;
         this.minBalance=minBalance;
+
     }
 
     public String generateAccountNumber(int digits, int sum) throws Exception{
@@ -48,18 +49,22 @@ public class BankAccount {
         if(sum<0 || sum>digits*9){
             throw new Exception("Account Number can not be generated");
         }
-        char [] ac= new char[digits];
-        Arrays.fill(ac, '0');
-        for(int i=1; i<digits; i++){
-            if(sum<=9){
-                ac[i]=(char)(sum+'0');
-                break;
-            }
-            ac[i]=9;
-            sum-=9;
+        int[] accountDigits = new int[digits];
+        for (int i = 0; i < digits - 1; i++) {
+            int maxDigitValue = Math.min(sum, 9);
+            int randomDigit = (int) (Math.random() * (maxDigitValue + 1));
+            accountDigits[i] = randomDigit;
+            sum -= randomDigit;
         }
 
-        return ac.toString();
+        accountDigits[digits - 1] = sum;
+
+        StringBuilder accountNumber = new StringBuilder();
+        for (int digit : accountDigits) {
+            accountNumber.append(digit);
+        }
+
+        return accountNumber.toString();
     }
 
     public void deposit(double amount) {
