@@ -50,7 +50,7 @@ public class BankAccount {
         }
         char [] ac= new char[digits];
         Arrays.fill(ac, '0');
-        for(int i=digits-1; i>=0; i--){
+        for(int i=1; i<digits; i++){
             if(sum<=9){
                 ac[i]=(char)(sum+'0');
                 break;
