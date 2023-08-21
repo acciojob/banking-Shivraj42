@@ -1,9 +1,12 @@
 package com.driver;
 
 import java.util.HashMap;
+import java.util.PriorityQueue;
 
 public class CurrentAccount extends BankAccount{
     String tradeLicenseId; //consists of Uppercase English characters only
+
+
 
     public CurrentAccount(String name, double balance, String tradeLicenseId) throws Exception {
         // minimum balance is 5000 by default. If balance is less than 5000, throw "Insufficient Balance" exception
@@ -20,6 +23,7 @@ public class CurrentAccount extends BankAccount{
     }
 
     public String getTradeLicenseId() {
+        //System.out.println(this.tradeLicenseId);
         return tradeLicenseId;
     }
 
@@ -44,35 +48,46 @@ public class CurrentAccount extends BankAccount{
         if(isValid) return;
         int map[] = new int[26];
         int max=0;
-        int maxi=0;
         for(int i=0; i<n; i++){
-            map[id[i]-'a']++;
+            map[id[i]-'A']++;
         }
+
+        PriorityQueue<pair> pq= new PriorityQueue<pair>((a, b)->{
+            return a.frq-b.frq;
+        });
+
         for(int i=0; i<map.length; i++){
+            if(map[i]>0) pq.add(new pair((char) (i+'A'), map[i]));
             if(max<map[i]){
                 max= map[i];
-                maxi=i;
             }
         }
         if(max>(n+1)/2){
             throw new Exception("Valid License can not be generated");
         }
-        int i=0;
-        while(map[maxi]>0){
-            id[i]=(char)(maxi+'a');
-            map[maxi]--;
-            i+=2;
-        }
-        for(int j=0; j<map.length; j++){
-            while(map[j]>0){
+
+        int  i=0;
+        while(!pq.isEmpty()){
+            pair p=pq.remove();
+            while(p.frq>0){
                 if(i>=n) i=1;
-                id[i]=(char)(j+'a');
-                map[j]--;
+                id[i]= p.letter;
+                p.frq--;
                 i+=2;
             }
         }
 
         this.setTradeLicenseId(id.toString());
+    }
+    class pair {
+        char letter;
+        int frq;
+
+        pair(char letter, int frq){
+            this.letter=letter;
+            this.frq= frq;
+        }
+
     }
 
 }
