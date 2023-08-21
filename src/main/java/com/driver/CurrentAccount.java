@@ -7,13 +7,8 @@ public class CurrentAccount extends BankAccount{
 
     public CurrentAccount(String name, double balance, String tradeLicenseId) throws Exception {
         // minimum balance is 5000 by default. If balance is less than 5000, throw "Insufficient Balance" exception
-        super();
-        if(balance<5000){
-            throw new Exception("Insufficient Balance");
-        }
-        this.setName(name);
-        this.setBalance(balance);
-        this.setMinBalance(5000);
+
+        super(name, balance, 5000);
         this.tradeLicenseId= tradeLicenseId;
     }
 
@@ -49,9 +44,11 @@ public class CurrentAccount extends BankAccount{
         int maxi=0;
         for(int i=0; i<n; i++){
             map[id[i]-'a']++;
-            if(max<map[id[i]-'a']){
-                max= map[id[i]-'a'];
-                maxi=id[i]-'a';
+        }
+        for(int i=0; i<map.length; i++){
+            if(max<map[i]){
+                max= map[i];
+                maxi=i;
             }
         }
         if(max>(n+1)/2){
